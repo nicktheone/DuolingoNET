@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 
 namespace DuolingoNET
 {
+
     /// <summary>
     /// The main class.
     /// Contains all methods for performing basic functions.
@@ -17,6 +22,16 @@ namespace DuolingoNET
     /// </remarks>
     public class Duolingo
     {
+
+        #region Constants
+
+        /// <summary>
+        /// The default <see cref="Uri"/> used by Duolingo.
+        /// </summary>
+        private static readonly Uri BaseUri = new Uri("https://www.duolingo.com/");
+
+        #endregion
+
         #region Properties
 
         /// <summary>
@@ -47,5 +62,31 @@ namespace DuolingoNET
 
         #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// Authenticates through <c>https://www.duolingo.com/login</c>.
+        /// </summary>
+        public async void Login()
+        {
+            var cookieContainer = new CookieContainer();
+            var handler = new HttpClientHandler() { CookieContainer = cookieContainer };
+            var client = new HttpClient(handler) { BaseAddress = BaseUri };
+
+            // Initial request to Duolingo homepage in order to get some basic cookies
+            // It may help with login
+            var homePageResult = client.GetAsync("/");
+            homePageResult.Result.EnsureSuccessStatusCode();
+
+            // Formats the JSON string used for authentication
+            var jsonString = String.Format(@"{""username"":{0},""password"":{1}}", Username, Password);
+            var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+
+            // Logs in and ensures success
+            var loginResult = await client.PostAsync("/login", content);
+            loginResult.EnsureSuccessStatusCode();
+
+            #endregion
+        }
     }
 }
