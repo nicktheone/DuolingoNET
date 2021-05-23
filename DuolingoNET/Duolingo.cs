@@ -44,6 +44,11 @@ namespace DuolingoNET
         /// </summary>
         public string Password { get; set; }
 
+        /// <summary>
+        /// The <see cref="HttpClient"/> used throughout the library
+        /// </summary>
+        public HttpClient Client { get; set; }
+
         #endregion
 
         #region Constructors
@@ -71,22 +76,23 @@ namespace DuolingoNET
         {
             var cookieContainer = new CookieContainer();
             var handler = new HttpClientHandler() { CookieContainer = cookieContainer };
-            var client = new HttpClient(handler) { BaseAddress = BaseUri };
+            Client = new HttpClient(handler) { BaseAddress = BaseUri };
 
             // Initial request to Duolingo homepage in order to get some basic cookies
             // It may help with login
-            var homePageResult = client.GetAsync("/");
+            var homePageResult = Client.GetAsync("/");
             homePageResult.Result.EnsureSuccessStatusCode();
 
             // Formats the JSON string used for authentication
-            var jsonString = String.Format(@"{{""username"":{0},""password"":{1}}}", Username, Password);
-            var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+            var jsonString = String.Format(@"{{""login"":""{0}"",""password"":""{1}""}}", Username, Password);
+            HttpContent content = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
             // Logs in and ensures success
-            var loginResult = await client.PostAsync("/login", content);
+            var loginResult = await Client.PostAsync("/login", content);
             loginResult.EnsureSuccessStatusCode();
-
-            #endregion
         }
+
+        #endregion
+
     }
 }
