@@ -67,7 +67,7 @@ namespace DuolingoNET
         /// <summary>
         /// Authenticates through <c>https://www.duolingo.com/login</c>.
         /// </summary>
-        public async void Login()
+        private async void Login()
         {
             var cookieContainer = new CookieContainer();
             var handler = new HttpClientHandler() { CookieContainer = cookieContainer };
@@ -79,7 +79,7 @@ namespace DuolingoNET
             homePageResult.Result.EnsureSuccessStatusCode();
 
             // Formats the JSON string used for authentication
-            var jsonString = String.Format(@"{""username"":{0},""password"":{1}}", Username, Password);
+            var jsonString = String.Format(@"{{""username"":{0},""password"":{1}}}", Username, Password);
             var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
             // Logs in and ensures success
