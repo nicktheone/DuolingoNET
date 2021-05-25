@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DuolingoNET
 {
@@ -74,10 +74,20 @@ namespace DuolingoNET
 
         #region Methods
 
+        public async void GetUserData()
+        {
+            // Logs in
+            await Login();
+
+            var getUserDataResult = await Client.GetAsync("/users/nicktheone1606");
+            //getUserDataResult.EnsureSuccessStatusCode();
+            Console.WriteLine(await getUserDataResult.Content.ReadAsStringAsync());
+        }
+
         /// <summary>
         /// Authenticates through <c>https://www.duolingo.com/login</c>.
         /// </summary>
-        private async void Login()
+        private async Task Login()
         {
             // Initial request to Duolingo homepage in order to get some basic cookies
             // It may help with login
