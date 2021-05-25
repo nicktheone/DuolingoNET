@@ -63,6 +63,11 @@ namespace DuolingoNET
         {
             Username = username;
             Password = password;
+
+            // Creates the web client that will be used for contacting Duolingo's server
+            var cookieContainer = new CookieContainer();
+            var handler = new HttpClientHandler() { CookieContainer = cookieContainer };
+            Client = new HttpClient(handler) { BaseAddress = BaseUri };
         }
 
         #endregion
@@ -74,10 +79,6 @@ namespace DuolingoNET
         /// </summary>
         private async void Login()
         {
-            var cookieContainer = new CookieContainer();
-            var handler = new HttpClientHandler() { CookieContainer = cookieContainer };
-            Client = new HttpClient(handler) { BaseAddress = BaseUri };
-
             // Initial request to Duolingo homepage in order to get some basic cookies
             // It may help with login
             var homePageResult = Client.GetAsync("/");
@@ -90,6 +91,7 @@ namespace DuolingoNET
             // Logs in and ensures success
             var loginResult = await Client.PostAsync("/login", content);
             loginResult.EnsureSuccessStatusCode();
+            Console.WriteLine(await loginResult.Content.ReadAsStringAsync());
         }
 
         #endregion
