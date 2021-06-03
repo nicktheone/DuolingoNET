@@ -80,7 +80,7 @@ namespace DuolingoNET
             await Login();
 
             var getUserDataResult = await Client.GetAsync("/users/nicktheone1606");
-            //getUserDataResult.EnsureSuccessStatusCode();
+            getUserDataResult.EnsureSuccessStatusCode();
             Console.WriteLine(await getUserDataResult.Content.ReadAsStringAsync());
         }
 
