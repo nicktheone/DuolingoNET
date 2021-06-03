@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace DuolingoNET
 {
@@ -45,9 +46,14 @@ namespace DuolingoNET
         public string Password { get; set; }
 
         /// <summary>
-        /// The <see cref="HttpClient"/> used throughout the library
+        /// The <see cref="HttpClient"/> used throughout the library.
         /// </summary>
         public HttpClient Client { get; set; }
+
+        /// <summary>
+        /// The <see cref="DuolingoNET.User"/> containing the data of the user.
+        /// </summary>
+        public User User { get; set; }
 
         #endregion
 
@@ -68,18 +74,25 @@ namespace DuolingoNET
             var cookieContainer = new CookieContainer();
             var handler = new HttpClientHandler() { CookieContainer = cookieContainer };
             Client = new HttpClient(handler) { BaseAddress = BaseUri };
+
+            // Creates the blank user used to store the data
+            User = new User();
         }
 
         #endregion
 
         #region Methods
 
+        /// <summary>
+        /// Gets the user data through <c>https://www.duolingo.com/users/username</c>.
+        /// </summary>
         public async void GetUserData()
         {
             // Logs in
             await Login();
 
-            var getUserDataResult = await Client.GetAsync("/users/nicktheone1606");
+            // Gets the user data using the username extracted from the login data
+            var getUserDataResult = await Client.GetAsync(string.Format("/users/{0}", User.Username));
             getUserDataResult.EnsureSuccessStatusCode();
             Console.WriteLine(await getUserDataResult.Content.ReadAsStringAsync());
         }
@@ -95,13 +108,15 @@ namespace DuolingoNET
             homePageResult.Result.EnsureSuccessStatusCode();
 
             // Formats the JSON string used for authentication
-            var jsonString = String.Format(@"{{""login"":""{0}"",""password"":""{1}""}}", Username, Password);
+            var jsonString = string.Format(@"{{""login"":""{0}"",""password"":""{1}""}}", Username, Password);
             HttpContent content = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
             // Logs in and ensures success
             var loginResult = await Client.PostAsync("/login", content);
             loginResult.EnsureSuccessStatusCode();
-            Console.WriteLine(await loginResult.Content.ReadAsStringAsync());
+
+            // Reads the username on the website
+            User = JsonConvert.DeserializeObject<User>(await loginResult.Content.ReadAsStringAsync());
         }
 
         #endregion

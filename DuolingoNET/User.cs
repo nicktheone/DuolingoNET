@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -17,8 +18,18 @@ namespace DuolingoNET
     /// <remarks>
     /// <para></para>
     /// </remarks>
-    class User
+    public class User
     {
+
+        #region Properties
+
+        /// <summary>
+        /// A string representing the username on the website.
+        /// </summary>
+        [JsonProperty("username")]
+        public string Username { get; set; }
+
+        #endregion
 
     }
 }
