@@ -40,12 +40,12 @@ namespace DuolingoNET
         /// <summary>
         /// A string representing the username or email of the account.
         /// </summary>
-        public string Username { get; set; }
+        public string LoginUsername { get; set; }
 
         /// <summary>
         /// A string representing the password of the account.
         /// </summary>
-        public string Password { get; set; }
+        public string LoginPassword { get; set; }
 
         /// <summary>
         /// The <see cref="HttpClient"/> used throughout the library.
@@ -87,8 +87,8 @@ namespace DuolingoNET
         /// <param name="password">A string representing the password of the account.</param>
         public Duolingo(string username, string password)
         {
-            Username = username;
-            Password = password;
+            LoginUsername = username;
+            LoginPassword = password;
 
             Initialize();
 
@@ -195,7 +195,7 @@ namespace DuolingoNET
             homePageResult.Result.EnsureSuccessStatusCode();
 
             // Formats the JSON string used for authentication
-            var jsonString = string.Format(@"{{""login"":""{0}"",""password"":""{1}""}}", Username, Password);
+            var jsonString = string.Format(@"{{""login"":""{0}"",""password"":""{1}""}}", LoginUsername, LoginPassword);
             HttpContent content = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
             // Logs in and ensures success
@@ -216,8 +216,8 @@ namespace DuolingoNET
                 string json = r.ReadToEnd();
                 dynamic loginData = JsonConvert.DeserializeObject<dynamic>(json);
 
-                Username = loginData.login;
-                Password = loginData.password;
+                LoginUsername = loginData.login;
+                LoginPassword = loginData.password;
             }
         }
 
