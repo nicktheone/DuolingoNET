@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -63,6 +64,16 @@ namespace DuolingoNET
         #region Constructors
 
         /// <summary>
+        /// Initializes a new instance of <see cref="Duolingo"/> reading from a LoginData.json file.
+        /// </summary>
+        public Duolingo()
+        {
+            ReadLoginData();
+
+            Initialize();
+        }
+
+        /// <summary>
         /// Initializes a new instance of <see cref="Duolingo"/> with the specified <paramref name="username"/> 
         /// and <paramref name="password"/>.
         /// </summary>
@@ -73,13 +84,7 @@ namespace DuolingoNET
             Username = username;
             Password = password;
 
-            // Creates the web client that will be used for contacting Duolingo's server
-            var cookieContainer = new CookieContainer();
-            var handler = new HttpClientHandler() { CookieContainer = cookieContainer };
-            Client = new HttpClient(handler) { BaseAddress = BaseUri };
-
-            // Creates the blank user used to store the data
-            User = new User();
+            Initialize();
         }
 
         #endregion
@@ -105,17 +110,17 @@ namespace DuolingoNET
             var results = o["language_data"][User.LearningLanguage];
             User.LanguageData = results.ToObject<User.Language>();
 
-            //Console.WriteLine(User.Username);
-            //Console.WriteLine(User.LearningLanguage);
-            //Console.WriteLine(User.FullName);
-            //Console.WriteLine(User.Id);
-            //foreach (var skill in User.LanguageData.Skills)
-            //{
-            //    if (skill.Learned)
-            //    {
-            //        Console.WriteLine(skill.Title);
-            //    }
-            //}
+            Console.WriteLine(User.Username);
+            Console.WriteLine(User.LearningLanguage);
+            Console.WriteLine(User.FullName);
+            Console.WriteLine(User.Id);
+            foreach (var skill in User.LanguageData.Skills)
+            {
+                if (skill.Learned)
+                {
+                    Console.WriteLine(skill.Title);
+                }
+            }
 
             //foreach (var property in User.GetType().GetProperties())
             //{
@@ -143,6 +148,35 @@ namespace DuolingoNET
 
             // Reads the username on the website
             User = JsonConvert.DeserializeObject<User>(await loginResult.Content.ReadAsStringAsync());
+        }
+
+        /// <summary>
+        /// Reads the login data from a JSON file.
+        /// </summary>
+        private void ReadLoginData()
+        {
+            using (StreamReader r = new StreamReader("LoginData.json"))
+            {
+                string json = r.ReadToEnd();
+                dynamic loginData = JsonConvert.DeserializeObject<dynamic>(json);
+
+                Username = loginData.login;
+                Password = loginData.password;
+            }
+        }
+
+        /// <summary>
+        /// Initializes the <see cref="HttpClient"/> and blank <see cref="DuolingoNET.User"/>
+        /// </summary>
+        private void Initialize()
+        {
+            // The web client that will be used for contacting Duolingo's server
+            var cookieContainer = new CookieContainer();
+            var handler = new HttpClientHandler() { CookieContainer = cookieContainer };
+            Client = new HttpClient(handler) { BaseAddress = BaseUri };
+
+            // The blank user used to store the data
+            User = new User();
         }
 
         #endregion
