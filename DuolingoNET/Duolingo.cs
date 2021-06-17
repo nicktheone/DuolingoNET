@@ -76,7 +76,7 @@ namespace DuolingoNET
             Initialize();
 
             // Logs in
-            Login().Wait();
+            LoginAsync().Wait();
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace DuolingoNET
             Initialize();
 
             // Logs in
-            Login().Wait();
+            LoginAsync().Wait();
         }
 
         #endregion
@@ -101,9 +101,33 @@ namespace DuolingoNET
         #region Methods
 
         /// <summary>
-        /// Gets the user vocabulary through <c>https://www.duolingo.com/vocabulary/overview</c>.
+        /// Gets the lexeme data through <c>https://www.duolingo.com/api/1/dictionary_page</c>.
         /// </summary>
-        public async Task GetVocabulary()
+        public async Task<Lexeme.Root> GetLexemeDataAsync(string lexemeId)
+        {
+            // Creates the lexeme that will be returned back
+            var lexeme = new Lexeme.Root();
+
+            // Gets the lexeme data
+            var getLexemeResult = await Client.GetAsync(string.Format("/api/1/dictionary_page?lexeme_id={0}&from_language_id={1}", lexemeId, "en"));
+            getLexemeResult.EnsureSuccessStatusCode();
+            var json = await getLexemeResult.Content.ReadAsStringAsync();
+
+            // Parses the lexeme
+            lexeme = JsonConvert.DeserializeObject<Lexeme.Root>(json);
+
+            Console.WriteLine("#########\n#<DEBUG>#\n#########");
+            Console.WriteLine(lexeme.Word);
+            Console.WriteLine(lexeme.Translations);
+            Console.WriteLine("##########\n#</DEBUG>#\n##########");
+
+            return lexeme;
+        }
+
+        /// <summary>
+        /// Gets the user vocabulary data through <c>https://www.duolingo.com/vocabulary/overview</c>.
+        /// </summary>
+        public async Task GetVocabularyAsync()
         {
             // Gets the user vocabulary
             var getVocabularyResult = await Client.GetAsync("/vocabulary/overview");
@@ -128,7 +152,7 @@ namespace DuolingoNET
         /// <summary>
         /// Gets the user data through <c>https://www.duolingo.com/users/username</c>.
         /// </summary>
-        public async Task GetUserData()
+        public async Task GetUserDataAsync()
         {
             // Gets the user data using the username extracted from the login data
             var getUserDataResult = await Client.GetAsync(string.Format("/users/{0}", User.Username));
@@ -163,7 +187,7 @@ namespace DuolingoNET
         /// <summary>
         /// Authenticates through <c>https://www.duolingo.com/login</c>.
         /// </summary>
-        private async Task Login()
+        private async Task LoginAsync()
         {
             // Initial request to Duolingo homepage in order to get some basic cookies
             // It may help with login
