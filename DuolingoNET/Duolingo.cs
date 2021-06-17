@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace DuolingoNET
 {
@@ -59,6 +57,11 @@ namespace DuolingoNET
         /// </summary>
         public User User { get; set; }
 
+        /// <summary>
+        /// The <see cref="DuolingoNET.Root"/> containing the known words of the user.
+        /// </summary>
+        public Vocabulary.Root Vocabulary { get; set; }
+
         #endregion
 
         #region Constructors
@@ -71,6 +74,9 @@ namespace DuolingoNET
             ReadLoginData();
 
             Initialize();
+
+            // Logs in
+            Login().Wait();
         }
 
         /// <summary>
@@ -85,6 +91,9 @@ namespace DuolingoNET
             Password = password;
 
             Initialize();
+
+            // Logs in
+            Login().Wait();
         }
 
         #endregion
@@ -92,13 +101,35 @@ namespace DuolingoNET
         #region Methods
 
         /// <summary>
+        /// Gets the user vocabulary through <c>https://www.duolingo.com/vocabulary/overview</c>.
+        /// </summary>
+        public async Task GetVocabulary()
+        {
+            // Gets the user vocabulary
+            var getVocabularyResult = await Client.GetAsync("/vocabulary/overview");
+            getVocabularyResult.EnsureSuccessStatusCode();
+            var json = await getVocabularyResult.Content.ReadAsStringAsync();
+
+            // Parses the user vocabulary
+            Vocabulary = JsonConvert.DeserializeObject<Vocabulary.Root>(json);
+
+            Console.WriteLine("#########\n#<DEBUG>#\n#########");
+            Console.WriteLine(Vocabulary.LanguageString);
+            Console.WriteLine(Vocabulary.LearningLanguage);
+            Console.WriteLine(Vocabulary.FromLanguage);
+            foreach (var vocab in Vocabulary.VocabOverview)
+            {
+                Console.WriteLine(vocab.Id);
+            }
+            Console.WriteLine("##########\n#</DEBUG>#\n##########");
+
+        }
+
+        /// <summary>
         /// Gets the user data through <c>https://www.duolingo.com/users/username</c>.
         /// </summary>
-        public async void GetUserData()
+        public async Task GetUserData()
         {
-            // Logs in
-            await Login();
-
             // Gets the user data using the username extracted from the login data
             var getUserDataResult = await Client.GetAsync(string.Format("/users/{0}", User.Username));
             getUserDataResult.EnsureSuccessStatusCode();
@@ -110,6 +141,7 @@ namespace DuolingoNET
             var results = o["language_data"][User.LearningLanguage];
             User.LanguageData = results.ToObject<User.Language>();
 
+            Console.WriteLine("#########\n#<DEBUG>#\n#########");
             Console.WriteLine(User.Username);
             Console.WriteLine(User.LearningLanguage);
             Console.WriteLine(User.FullName);
@@ -121,11 +153,11 @@ namespace DuolingoNET
                     Console.WriteLine(skill.Title);
                 }
             }
-
             //foreach (var property in User.GetType().GetProperties())
             //{
             //    Console.WriteLine(@"{0} + {1}", property.Name, property.GetValue(User, null));
             //}
+            Console.WriteLine("##########\n#</DEBUG>#\n##########");
         }
 
         /// <summary>
