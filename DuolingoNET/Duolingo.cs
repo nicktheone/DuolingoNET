@@ -38,12 +38,12 @@ namespace DuolingoNET
         #region Properties
 
         /// <summary>
-        /// A string representing the username or email of the account.
+        /// A string representing the username or email of the account used for login.
         /// </summary>
         public string LoginUsername { get; set; }
 
         /// <summary>
-        /// A string representing the password of the account.
+        /// A string representing the password of the account used for login.
         /// </summary>
         public string LoginPassword { get; set; }
 
@@ -51,6 +51,11 @@ namespace DuolingoNET
         /// The <see cref="HttpClient"/> used throughout the library.
         /// </summary>
         public HttpClient Client { get; set; }
+
+        /// <summary>
+        /// The <see cref="DuolingoNET.LoginData"/> containing the login data of the user.
+        /// </summary>
+        public LoginData LoginData { get; set; }
 
         /// <summary>
         /// The <see cref="DuolingoNET.User"/> containing the data of the user.
@@ -155,7 +160,7 @@ namespace DuolingoNET
         public async Task GetUserDataAsync()
         {
             // Gets the user data using the username extracted from the login data
-            var getUserDataResult = await Client.GetAsync(string.Format("/users/{0}", User.Username));
+            var getUserDataResult = await Client.GetAsync(string.Format("/users/{0}", LoginData.Username));
             getUserDataResult.EnsureSuccessStatusCode();
             var json = await getUserDataResult.Content.ReadAsStringAsync();
 
@@ -203,7 +208,7 @@ namespace DuolingoNET
             loginResult.EnsureSuccessStatusCode();
 
             // Reads the username on the website
-            User = JsonConvert.DeserializeObject<User>(await loginResult.Content.ReadAsStringAsync());
+            LoginData = JsonConvert.DeserializeObject<LoginData>(await loginResult.Content.ReadAsStringAsync());
         }
 
         /// <summary>
