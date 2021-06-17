@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace DuolingoNET
 {
@@ -94,7 +97,30 @@ namespace DuolingoNET
             // Gets the user data using the username extracted from the login data
             var getUserDataResult = await Client.GetAsync(string.Format("/users/{0}", User.Username));
             getUserDataResult.EnsureSuccessStatusCode();
-            Console.WriteLine(await getUserDataResult.Content.ReadAsStringAsync());
+            var json = await getUserDataResult.Content.ReadAsStringAsync();
+
+            // Parses the language data
+            User = JsonConvert.DeserializeObject<User>(json);
+            JObject o = JObject.Parse(json);
+            var results = o["language_data"][User.LearningLanguage];
+            User.LanguageData = results.ToObject<User.Language>();
+
+            //Console.WriteLine(User.Username);
+            //Console.WriteLine(User.LearningLanguage);
+            //Console.WriteLine(User.FullName);
+            //Console.WriteLine(User.Id);
+            //foreach (var skill in User.LanguageData.Skills)
+            //{
+            //    if (skill.Learned)
+            //    {
+            //        Console.WriteLine(skill.Title);
+            //    }
+            //}
+
+            //foreach (var property in User.GetType().GetProperties())
+            //{
+            //    Console.WriteLine(@"{0} + {1}", property.Name, property.GetValue(User, null));
+            //}
         }
 
         /// <summary>
