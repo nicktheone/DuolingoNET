@@ -40,22 +40,22 @@ namespace DuolingoNET
         /// <summary>
         /// A string representing the username or email of the account used for login.
         /// </summary>
-        public string LoginUsername { get; set; }
+        private string LoginUsername { get; set; }
 
         /// <summary>
         /// A string representing the password of the account used for login.
         /// </summary>
-        public string LoginPassword { get; set; }
+        private string LoginPassword { get; set; }
 
         /// <summary>
         /// The <see cref="HttpClient"/> used throughout the library.
         /// </summary>
-        public HttpClient Client { get; set; }
+        private HttpClient Client { get; set; }
 
         /// <summary>
         /// The <see cref="DuolingoNET.LoginData"/> containing the login data of the user.
         /// </summary>
-        public LoginData LoginData { get; set; }
+        private LoginData LoginData { get; set; }
 
         /// <summary>
         /// The <see cref="DuolingoNET.User"/> containing the data of the user.
