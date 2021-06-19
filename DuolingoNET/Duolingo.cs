@@ -108,6 +108,25 @@ namespace DuolingoNET
         #region Methods
 
         /// <summary>
+        /// Gets a list of known words from every learned skill.
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetKnownWords()
+        {
+            var words = new List<string>();
+
+            foreach (var skill in GetLearnedSkills())
+            {
+                foreach (var word in skill.Words)
+                {
+                    words.Add(word);
+                }
+            }
+
+            return words;
+        }
+
+        /// <summary>
         /// Gets a list of learned skills.
         /// </summary>
         /// <returns></returns>
