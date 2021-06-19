@@ -10,8 +10,8 @@ Unofficial .NET Core Duolingo (https://www.duolingor.com/) API. Available as a [
 
 - Create an instance of the 'Duolingo' class and provide it with either a 'username' or 'email' and 'password'.
 
-```c#
-var duolingo = new Duolingo('USERNAME, PASSWORD');
+```cs
+var duolingo = new Duolingo("USERNAME, PASSWORD");
 ```
 
 - Alternatively, it's possible to simply instantiate a new class and load the username/email and password from a JSON file 'LoginData.json' in the application folder.
@@ -25,4 +25,36 @@ var duolingo = new Duolingo('USERNAME, PASSWORD');
 Note: a valid account is needed to get any data from Duolingo.
 
 ### Documentation
-###### Prova
+###### Language
+- [GetLearnedSkills](#getlearnedskills)
+- [GetKnownWords](#getknownwords)
+- [GetLexemeDataAsync](#getlexemedataasync)
+- [GetVocabularyAsync](#getvocabularyasync)
+#### GetLearnedSkills
+```cs
+var duolingo = new Duolingo("USERNAME, PASSWORD");
+var skills = GetLearnedSkills();
+```
+Returns a `List<User.Skill>` containing all the skills learned (`"learned": True`) by the user.
+#### GetKnownWords
+```cs
+var duolingo = new Duolingo("USERNAME, PASSWORD");
+var skills = GetKnownWords();
+```
+Returns a `List<string>` containing all the words known by the user.
+#### GetLexemeDataAsync
+```cs
+var duolingo = new Duolingo("USERNAME, PASSWORD");
+var lexeme = GetLexemeDataAsync(lexemeId);
+```
+Returns a `Lexeme.Root` representing a single word.
+##### Paramaters
+string `lexemeId` **required**
+
+-- The id of the word you want to retrieve data for.
+#### GetVocabularyAsync
+```cs
+var duolingo = new Duolingo("USERNAME, PASSWORD");
+var lexeme = GetVocabularyAsync(lexemeId);
+```
+Returns a `Vocabulary.Root` representing the user's vocabulary.
