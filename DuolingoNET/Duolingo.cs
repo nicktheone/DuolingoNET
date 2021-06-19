@@ -108,6 +108,16 @@ namespace DuolingoNET
         #region Methods
 
         /// <summary>
+        /// Gets the TTS uri for any given lexeme</c>.
+        /// </summary>
+        public async Task<Uri> GetTtsUrlAsync(string lexemeId)
+        {
+            var lexeme = await GetLexemeDataAsync(lexemeId);
+
+            return new Uri(lexeme.Tts);
+        }
+
+        /// <summary>
         /// Gets a list of known words from every learned skill.
         /// </summary>
         /// <returns></returns>
