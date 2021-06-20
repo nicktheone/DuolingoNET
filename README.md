@@ -2,7 +2,7 @@
 [![NuGet](https://img.shields.io/nuget/v/DuolingoNET.svg)](https://www.nuget.org/packages/DuolingoNET)
 [![NuGet](https://img.shields.io/nuget/dt/DuolingoNET.svg)](https://www.nuget.org/packages/DuolingoNET)
 
-Unofficial .NET Core Duolingo (https://www.duolingor.com/) API. Available as a [NuGet package](https://www.nuget.org/packages/NPushover/).
+Unofficial .NET Core Duolingo (https://www.duolingo.com/) API. Available as a [NuGet package](https://www.nuget.org/packages/NPushover/).
 
 ### Usage
 
