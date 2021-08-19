@@ -32,21 +32,25 @@ namespace DuolingoNET
         /// <summary>
         /// The default <see cref="Uri"/> used by Duolingo.
         /// </summary>
-        private static readonly Uri BaseUri = new Uri("https://www.duolingo.com/");
+        private readonly Uri BaseUri = new Uri("https://www.duolingo.com/");
 
         #endregion
 
-        #region Properties
+        #region Fields
 
         /// <summary>
         /// A string representing the username or email of the account used for login.
         /// </summary>
-        private string LoginUsername { get; set; }
+        private readonly string loginUsername;
 
         /// <summary>
         /// A string representing the password of the account used for login.
         /// </summary>
-        private string LoginPassword { get; set; }
+        private readonly string loginPassword;
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// The <see cref="HttpClient"/> used throughout the library.
@@ -70,18 +74,18 @@ namespace DuolingoNET
         /// <summary>
         /// Initializes a new instance of <see cref="Duolingo"/> reading from a LoginData.json file.
         /// </summary>
-        public Duolingo()
-        {
-            ReadLoginData();
+        //public Duolingo()
+        //{
+        //    ReadLoginData();
 
-            Initialize();
+        //    Initialize();
 
-            // Logs in
-            LoginAsync().Wait();
+        //    // Logs in
+        //    LoginAsync().Wait();
 
-            // Gets the user data
-            GetUserDataAsync().Wait();
-        }
+        //    // Gets the user data
+        //    GetUserDataAsync().Wait();
+        //}
 
         /// <summary>
         /// Initializes a new instance of <see cref="Duolingo"/> with the specified <paramref name="username"/> 
@@ -91,8 +95,17 @@ namespace DuolingoNET
         /// <param name="password">A string representing the password of the account.</param>
         public Duolingo(string username, string password)
         {
-            LoginUsername = username;
-            LoginPassword = password;
+            if (username == null)
+            {
+                throw new ArgumentNullException("username");
+            }
+            loginUsername = username;
+
+            if (username == null)
+            {
+                throw new ArgumentNullException("password");
+            }
+            loginPassword = password;
 
             Initialize();
 
@@ -220,7 +233,7 @@ namespace DuolingoNET
             homePageResult.EnsureSuccessStatusCode();
 
             // Formats the JSON string used for authentication
-            var jsonString = string.Format(@"{{""login"":""{0}"",""password"":""{1}""}}", LoginUsername, LoginPassword);
+            var jsonString = string.Format(@"{{""login"":""{0}"",""password"":""{1}""}}", loginUsername, loginPassword);
             HttpContent content = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
             // Logs in and ensures success
@@ -234,17 +247,17 @@ namespace DuolingoNET
         /// <summary>
         /// Reads the login data from a JSON file.
         /// </summary>
-        private void ReadLoginData()
-        {
-            using (StreamReader r = new StreamReader("LoginData.json"))
-            {
-                string json = r.ReadToEnd();
-                dynamic loginData = JsonConvert.DeserializeObject<dynamic>(json);
+        //private void ReadLoginData()
+        //{
+        //    using (StreamReader r = new StreamReader("LoginData.json"))
+        //    {
+        //        string json = r.ReadToEnd();
+        //        dynamic loginData = JsonConvert.DeserializeObject<dynamic>(json);
 
-                LoginUsername = loginData.login;
-                LoginPassword = loginData.password;
-            }
-        }
+        //        loginUsername = loginData.login;
+        //        loginPassword = loginData.password;
+        //    }
+        //}
 
         /// <summary>
         /// Initializes the <see cref="HttpClient"/> and blank <see cref="DuolingoNET.User"/>
