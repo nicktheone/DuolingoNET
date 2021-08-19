@@ -112,7 +112,7 @@ namespace DuolingoNET
         /// </summary>
         public async Task<Uri> GetTtsUrlAsync(string lexemeId)
         {
-            var lexeme = await GetLexemeDataAsync(lexemeId);
+            var lexeme = await GetLexemeDataAsync(lexemeId).ConfigureAwait(false);
 
             return new Uri(lexeme.Tts);
         }
@@ -164,9 +164,9 @@ namespace DuolingoNET
             var lexeme = new Lexeme.Root();
 
             // Gets the lexeme data
-            var getLexemeResult = await Client.GetAsync(string.Format("/api/1/dictionary_page?lexeme_id={0}&from_language_id={1}", lexemeId, "en"));
+            var getLexemeResult = await Client.GetAsync(string.Format("/api/1/dictionary_page?lexeme_id={0}&from_language_id={1}", lexemeId, "en")).ConfigureAwait(false);
             getLexemeResult.EnsureSuccessStatusCode();
-            var json = await getLexemeResult.Content.ReadAsStringAsync();
+            var json = await getLexemeResult.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             // Parses the lexeme
             lexeme = JsonConvert.DeserializeObject<Lexeme.Root>(json);
@@ -182,9 +182,9 @@ namespace DuolingoNET
             var vocabulary = new Vocabulary.Root();
 
             // Gets the user vocabulary
-            var getVocabularyResult = await Client.GetAsync("/vocabulary/overview");
+            var getVocabularyResult = await Client.GetAsync("/vocabulary/overview").ConfigureAwait(false);
             getVocabularyResult.EnsureSuccessStatusCode();
-            var json = await getVocabularyResult.Content.ReadAsStringAsync();
+            var json = await getVocabularyResult.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             // Parses the user vocabulary
             vocabulary = JsonConvert.DeserializeObject<Vocabulary.Root>(json);
@@ -198,9 +198,9 @@ namespace DuolingoNET
         private async Task GetUserDataAsync()
         {
             // Gets the user data using the username extracted from the login data
-            var getUserDataResult = await Client.GetAsync(string.Format("/users/{0}", LoginData.Username));
+            var getUserDataResult = await Client.GetAsync(string.Format("/users/{0}", LoginData.Username)).ConfigureAwait(false);
             getUserDataResult.EnsureSuccessStatusCode();
-            var json = await getUserDataResult.Content.ReadAsStringAsync();
+            var json = await getUserDataResult.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             // Parses the language data
             UserData = JsonConvert.DeserializeObject<User>(json);
@@ -212,23 +212,23 @@ namespace DuolingoNET
         /// <summary>
         /// Authenticates through <c>https://www.duolingo.com/login</c>.
         /// </summary>
-        private async Task LoginAsync()
+        private async Task LoginAsync() 
         {
             // Initial request to Duolingo homepage in order to get some basic cookies
             // It may help with login
-            var homePageResult = Client.GetAsync("/");
-            homePageResult.Result.EnsureSuccessStatusCode();
+            var homePageResult = await Client.GetAsync("/").ConfigureAwait(false);
+            homePageResult.EnsureSuccessStatusCode();
 
             // Formats the JSON string used for authentication
             var jsonString = string.Format(@"{{""login"":""{0}"",""password"":""{1}""}}", LoginUsername, LoginPassword);
             HttpContent content = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
             // Logs in and ensures success
-            var loginResult = await Client.PostAsync("/login", content);
+            var loginResult = await Client.PostAsync("/login", content).ConfigureAwait(false);
             loginResult.EnsureSuccessStatusCode();
 
             // Reads the username on the website
-            LoginData = JsonConvert.DeserializeObject<LoginData>(await loginResult.Content.ReadAsStringAsync());
+            LoginData = JsonConvert.DeserializeObject<LoginData>(await loginResult.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 
         /// <summary>
