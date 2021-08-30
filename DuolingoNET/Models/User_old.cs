@@ -16,7 +16,7 @@ namespace DuolingoNET
     /// <remarks>
     /// <para></para>
     /// </remarks>
-    public class User
+    public class User_old
     {
 
         #region Properties

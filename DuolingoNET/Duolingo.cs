@@ -60,7 +60,7 @@ namespace DuolingoNET
         /// <summary>
         /// The <see cref="DuolingoNET.User"/> containing the data of the user.
         /// </summary>
-        public User UserData { get; set; } = new User();
+        public User.Root UserData { get; set; } = new User.Root();
 
         #endregion
 
@@ -198,10 +198,10 @@ namespace DuolingoNET
             var json = await getUserDataResult.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             // Parses the language data
-            UserData = JsonConvert.DeserializeObject<User>(json);
+            UserData = JsonConvert.DeserializeObject<User.Root>(json);
             JObject o = JObject.Parse(json);
             var results = o["language_data"][UserData.LearningLanguage];
-            UserData.LanguageData = results.ToObject<User.Language>();
+            UserData.LanguageData = results.ToObject<User.LanguageStudied>();
         }
 
         /// <summary>
