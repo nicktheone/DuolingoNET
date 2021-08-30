@@ -245,21 +245,6 @@ namespace DuolingoNET
         }
 
         /// <summary>
-        /// Reads the login data from a JSON file.
-        /// </summary>
-        //private void ReadLoginData()
-        //{
-        //    using (StreamReader r = new StreamReader("LoginData.json"))
-        //    {
-        //        string json = r.ReadToEnd();
-        //        dynamic loginData = JsonConvert.DeserializeObject<dynamic>(json);
-
-        //        loginUsername = loginData.login;
-        //        loginPassword = loginData.password;
-        //    }
-        //}
-
-        /// <summary>
         /// Initializes the <see cref="HttpClient"/> and blank <see cref="DuolingoNET.User"/>
         /// </summary>
         private void Initialize()
