@@ -26,17 +26,12 @@ namespace DuolingoNET
     /// </remarks>
     public class Duolingo
     {
-
-        #region Constants
+        #region Fields
 
         /// <summary>
         /// The default <see cref="Uri"/> used by Duolingo.
         /// </summary>
-        private readonly Uri BaseUri = new Uri("https://www.duolingo.com/");
-
-        #endregion
-
-        #region Fields
+        private readonly Uri baseUri = new Uri("https://www.duolingo.com/");
 
         /// <summary>
         /// A string representing the username or email of the account used for login.
@@ -65,7 +60,7 @@ namespace DuolingoNET
         /// <summary>
         /// The <see cref="DuolingoNET.User"/> containing the data of the user.
         /// </summary>
-        public User UserData { get; set; }
+        public User UserData { get; set; } = new User();
 
         #endregion
 
@@ -83,12 +78,13 @@ namespace DuolingoNET
             {
                 throw new ArgumentNullException("username");
             }
-            loginUsername = username;
 
             if (username == null)
             {
                 throw new ArgumentNullException("password");
             }
+
+            loginUsername = username;
             loginPassword = password;
 
             Initialize();
@@ -236,10 +232,7 @@ namespace DuolingoNET
             // The web client that will be used for contacting Duolingo's server
             var cookieContainer = new CookieContainer();
             var handler = new HttpClientHandler() { CookieContainer = cookieContainer };
-            Client = new HttpClient(handler) { BaseAddress = BaseUri };
-
-            // The blank user used to store the data
-            UserData = new User();
+            Client = new HttpClient(handler) { BaseAddress = baseUri };
         }
 
         #endregion
