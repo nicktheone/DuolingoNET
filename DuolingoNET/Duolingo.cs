@@ -94,8 +94,6 @@ namespace DuolingoNET
             this.client = client;
             client.BaseAddress = baseUri;
 
-            //Initialize();
-
             // Logs in
             LoginAsync().Wait();
 
@@ -230,17 +228,6 @@ namespace DuolingoNET
             // Reads the username on the website
             LoginData = JsonConvert.DeserializeObject<LoginData>(await loginResult.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
-
-        /// <summary>
-        /// Initializes the <see cref="HttpClient"/> and blank <see cref="DuolingoNET.User"/>
-        /// </summary>
-        //private void Initialize()
-        //{
-        //    // The web client that will be used for contacting Duolingo's server
-        //    var cookieContainer = new CookieContainer();
-        //    var handler = new HttpClientHandler() { CookieContainer = cookieContainer };
-        //    Client = new HttpClient() { BaseAddress = baseUri };
-        //}
 
         #endregion
 
