@@ -72,22 +72,6 @@ namespace DuolingoNET
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of <see cref="Duolingo"/> reading from a LoginData.json file.
-        /// </summary>
-        //public Duolingo()
-        //{
-        //    ReadLoginData();
-
-        //    Initialize();
-
-        //    // Logs in
-        //    LoginAsync().Wait();
-
-        //    // Gets the user data
-        //    GetUserDataAsync().Wait();
-        //}
-
-        /// <summary>
         /// Initializes a new instance of <see cref="Duolingo"/> with the specified <paramref name="username"/> 
         /// and <paramref name="password"/>.
         /// </summary>
