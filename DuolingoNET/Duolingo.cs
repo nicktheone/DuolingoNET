@@ -76,17 +76,17 @@ namespace DuolingoNET
         {
             if (username == null)
             {
-                throw new ArgumentNullException("username");
+                throw new ArgumentNullException(nameof(username));
             }
 
             if (username == null)
             {
-                throw new ArgumentNullException("password");
+                throw new ArgumentNullException(nameof(password));
             }
 
             if (client == null)
             {
-                throw new ArgumentNullException("client");
+                throw new ArgumentNullException(nameof(client));
             }
 
             this.loginUsername = username;
@@ -95,10 +95,10 @@ namespace DuolingoNET
             client.BaseAddress = baseUri;
 
             // Logs in
-            LoginAsync().Wait();
+            LoginAsync().GetAwaiter().GetResult();
 
             // Gets the user data
-            GetUserDataAsync().Wait();
+            GetUserDataAsync().GetAwaiter().GetResult();
         }
 
         #endregion
