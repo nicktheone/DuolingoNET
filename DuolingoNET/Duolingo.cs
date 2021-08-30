@@ -43,14 +43,14 @@ namespace DuolingoNET
         /// </summary>
         private readonly string loginPassword;
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// The <see cref="HttpClient"/> used throughout the library.
         /// </summary>
-        private HttpClient Client { get; set; }
+        private readonly HttpClient client;
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// The <see cref="DuolingoNET.LoginData"/> containing the login data of the user.
@@ -72,7 +72,7 @@ namespace DuolingoNET
         /// </summary>
         /// <param name="username">A string representing the username or email of the account.</param>
         /// <param name="password">A string representing the password of the account.</param>
-        public Duolingo(string username, string password)
+        public Duolingo(string username, string password, HttpClient client)
         {
             if (username == null)
             {
@@ -84,10 +84,17 @@ namespace DuolingoNET
                 throw new ArgumentNullException("password");
             }
 
-            loginUsername = username;
-            loginPassword = password;
+            if (client == null)
+            {
+                throw new ArgumentNullException("client");
+            }
 
-            Initialize();
+            this.loginUsername = username;
+            this.loginPassword = password;
+            this.client = client;
+            client.BaseAddress = baseUri;
+
+            //Initialize();
 
             // Logs in
             LoginAsync().Wait();
@@ -157,7 +164,7 @@ namespace DuolingoNET
             var lexeme = new Lexeme.Root();
 
             // Gets the lexeme data
-            var getLexemeResult = await Client.GetAsync(string.Format("/api/1/dictionary_page?lexeme_id={0}&from_language_id={1}", lexemeId, "en")).ConfigureAwait(false);
+            var getLexemeResult = await client.GetAsync(string.Format("/api/1/dictionary_page?lexeme_id={0}&from_language_id={1}", lexemeId, "en")).ConfigureAwait(false);
             getLexemeResult.EnsureSuccessStatusCode();
             var json = await getLexemeResult.Content.ReadAsStringAsync().ConfigureAwait(false);
 
@@ -175,7 +182,7 @@ namespace DuolingoNET
             var vocabulary = new Vocabulary.Root();
 
             // Gets the user vocabulary
-            var getVocabularyResult = await Client.GetAsync("/vocabulary/overview").ConfigureAwait(false);
+            var getVocabularyResult = await client.GetAsync("/vocabulary/overview").ConfigureAwait(false);
             getVocabularyResult.EnsureSuccessStatusCode();
             var json = await getVocabularyResult.Content.ReadAsStringAsync().ConfigureAwait(false);
 
@@ -191,7 +198,7 @@ namespace DuolingoNET
         private async Task GetUserDataAsync()
         {
             // Gets the user data using the username extracted from the login data
-            var getUserDataResult = await Client.GetAsync(string.Format("/users/{0}", LoginData.Username)).ConfigureAwait(false);
+            var getUserDataResult = await client.GetAsync(string.Format("/users/{0}", LoginData.Username)).ConfigureAwait(false);
             getUserDataResult.EnsureSuccessStatusCode();
             var json = await getUserDataResult.Content.ReadAsStringAsync().ConfigureAwait(false);
 
@@ -209,7 +216,7 @@ namespace DuolingoNET
         {
             // Initial request to Duolingo homepage in order to get some basic cookies
             // It may help with login
-            var homePageResult = await Client.GetAsync("/").ConfigureAwait(false);
+            var homePageResult = await client.GetAsync("/").ConfigureAwait(false);
             homePageResult.EnsureSuccessStatusCode();
 
             // Formats the JSON string used for authentication
@@ -217,7 +224,7 @@ namespace DuolingoNET
             HttpContent content = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
             // Logs in and ensures success
-            var loginResult = await Client.PostAsync("/login", content).ConfigureAwait(false);
+            var loginResult = await client.PostAsync("/login", content).ConfigureAwait(false);
             loginResult.EnsureSuccessStatusCode();
 
             // Reads the username on the website
@@ -227,13 +234,13 @@ namespace DuolingoNET
         /// <summary>
         /// Initializes the <see cref="HttpClient"/> and blank <see cref="DuolingoNET.User"/>
         /// </summary>
-        private void Initialize()
-        {
-            // The web client that will be used for contacting Duolingo's server
-            var cookieContainer = new CookieContainer();
-            var handler = new HttpClientHandler() { CookieContainer = cookieContainer };
-            Client = new HttpClient(handler) { BaseAddress = baseUri };
-        }
+        //private void Initialize()
+        //{
+        //    // The web client that will be used for contacting Duolingo's server
+        //    var cookieContainer = new CookieContainer();
+        //    var handler = new HttpClientHandler() { CookieContainer = cookieContainer };
+        //    Client = new HttpClient() { BaseAddress = baseUri };
+        //}
 
         #endregion
 
