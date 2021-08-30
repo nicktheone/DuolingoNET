@@ -225,7 +225,43 @@ namespace DuolingoNET
         /// <summary>
         /// Authenticates through <c>https://www.duolingo.com/login</c>.
         /// </summary>
-        
+        private async Task LoginAsync() 
+        {
+            // Initial request to Duolingo homepage in order to get some basic cookies
+            // It may help with login
+            var homePageResult = await Client.GetAsync("/").ConfigureAwait(false);
+            homePageResult.EnsureSuccessStatusCode();
+
+            // Formats the JSON string used for authentication
+            var jsonString = string.Format(@"{{""login"":""{0}"",""password"":""{1}""}}", loginUsername, loginPassword);
+            HttpContent content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+
+            // Logs in and ensures success
+            var loginResult = await Client.PostAsync("/login", content).ConfigureAwait(false);
+            loginResult.EnsureSuccessStatusCode();
+
+            // Reads the username on the website
+            LoginData = JsonConvert.DeserializeObject<LoginData>(await loginResult.Content.ReadAsStringAsync().ConfigureAwait(false));
+        }
+
+        /// <summary>
+        /// Reads the login data from a JSON file.
+        /// </summary>
+        //private void ReadLoginData()
+        //{
+        //    using (StreamReader r = new StreamReader("LoginData.json"))
+        //    {
+        //        string json = r.ReadToEnd();
+        //        dynamic loginData = JsonConvert.DeserializeObject<dynamic>(json);
+
+        //        loginUsername = loginData.login;
+        //        loginPassword = loginData.password;
+        //    }
+        //}
+
+        /// <summary>
+        /// Initializes the <see cref="HttpClient"/> and blank <see cref="DuolingoNET.User"/>
+        /// </summary>
         private void Initialize()
         {
             // The web client that will be used for contacting Duolingo's server
