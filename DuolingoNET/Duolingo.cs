@@ -92,13 +92,10 @@ namespace DuolingoNET
             this.loginUsername = username;
             this.loginPassword = password;
             this.client = client;
+
             client.BaseAddress = baseUri;
 
-            // Logs in
-            LoginAsync().GetAwaiter().GetResult();
-
-            // Gets the user data
-            GetUserDataAsync().GetAwaiter().GetResult();
+            Initialize();
         }
 
         #endregion
@@ -227,6 +224,18 @@ namespace DuolingoNET
 
             // Reads the username on the website
             LoginData = JsonConvert.DeserializeObject<LoginData>(await loginResult.Content.ReadAsStringAsync().ConfigureAwait(false));
+        }
+
+        /// <summary>
+        /// Logs in the user and downloads the necessary data</c>.
+        /// </summary>
+        private void Initialize()
+        {
+            // Logs in
+            LoginAsync().GetAwaiter().GetResult();
+
+            // Gets the user data
+            GetUserDataAsync().GetAwaiter().GetResult();
         }
 
         #endregion
