@@ -725,10 +725,10 @@ namespace DuolingoNET
 
         public class Root
         {
+            public LanguageStudied LanguageData { get; set; }
+
             [JsonProperty("filter_stream")]
             public bool FilterStream { get; set; }
-
-            public LanguageStudied LanguageData { get; set; }
 
             [JsonProperty("deactivated")]
             public bool Deactivated { get; set; }
@@ -752,7 +752,7 @@ namespace DuolingoNET
             public List<Language> Languages { get; set; }
 
             [JsonProperty("location")]
-            public object Location { get; set; }
+            public string Location { get; set; }
 
             [JsonProperty("bio")]
             public string Bio { get; set; }
@@ -914,7 +914,7 @@ namespace DuolingoNET
             public bool EmailEventsDigest { get; set; }
 
             [JsonProperty("facebook_id")]
-            public object FacebookId { get; set; }
+            public string FacebookId { get; set; }
 
             [JsonProperty("browser_language")]
             public string BrowserLanguage { get; set; }
@@ -950,7 +950,7 @@ namespace DuolingoNET
             public bool NotifyClassroomJoin { get; set; }
 
             [JsonProperty("twitter_id")]
-            public object TwitterId { get; set; }
+            public string TwitterId { get; set; }
 
             [JsonProperty("notify_stream_post")]
             public bool NotifyStreamPost { get; set; }

@@ -48,14 +48,14 @@ namespace DuolingoNET
         /// </summary>
         private readonly HttpClient client;
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// The <see cref="DuolingoNET.LoginData"/> containing the login data of the user.
         /// </summary>
-        private LoginData LoginData { get; set; }
+        private LoginData LoginData;
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// The <see cref="DuolingoNET.User"/> containing the data of the user.
@@ -185,6 +185,35 @@ namespace DuolingoNET
             vocabulary = JsonConvert.DeserializeObject<Vocabulary.Root>(json);
 
             return vocabulary;
+        }
+
+        /// <summary>
+        /// Gets the user general info</c>.
+        /// </summary>
+        public UserInfo GetUserInfo()
+        {
+            return new UserInfo
+            {
+                avatar = UserData.Avatar,
+                bio = UserData.Bio,
+                browserLanguage = UserData.BrowserLanguage,
+                created = UserData.Created,
+                email = UserData.Email,
+                facebookId = UserData.FacebookId,
+                fullname = UserData.Fullname,
+                gplusId = UserData.GplusId,
+                id = UserData.Id,
+                inviteUrl = UserData.InviteUrl,
+                isAdmin = UserData.Admin,
+                isTrialAccount = UserData.TrialAccount,
+                learningLanguage = UserData.LearningLanguageString,
+                learningLanguageAbbreviation = UserData.LearningLanguage,
+                location = UserData.Location,
+                timezone = UserData.Timezone,
+                twitterId = UserData.TwitterId,
+                uiLanguage = UserData.UiLanguage,
+                username = UserData.Username,
+            };
         }
 
         /// <summary>
