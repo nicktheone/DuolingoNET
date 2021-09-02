@@ -99,7 +99,7 @@ namespace DuolingoNET
         #region Methods
 
         /// <summary>
-        /// Gets the TTS uri for any given lexeme</c>.
+        /// Gets the TTS uri for any given lexeme.
         /// </summary>
         public async Task<Uri> GetTtsUrlAsync(string lexemeId)
         {
@@ -111,7 +111,6 @@ namespace DuolingoNET
         /// <summary>
         /// Gets a list of known words from every learned skill.
         /// </summary>
-        /// <returns></returns>
         public List<string> GetKnownWords()
         {
             var words = new List<string>();
@@ -130,7 +129,6 @@ namespace DuolingoNET
         /// <summary>
         /// Gets a list of learned skills.
         /// </summary>
-        /// <returns></returns>
         public List<User.Skill> GetLearnedSkills()
         {
             var skills = new List<User.Skill>();
@@ -184,7 +182,7 @@ namespace DuolingoNET
         }
 
         /// <summary>
-        /// Gets the user general info <see cref="DuolingoNET.UserInfo"/></c>.
+        /// Gets the user general info <see cref="DuolingoNET.UserInfo"/>.
         /// </summary>
         public UserInfo GetUserInfo()
         {
@@ -212,6 +210,9 @@ namespace DuolingoNET
             };
         }
 
+        /// <summary>
+        /// Gets the user raw data info <see cref="DuolingoNET.User.Root"/>.
+        /// </summary>
         public User.Root GetUserDataRaw()
         {
             return userData;
