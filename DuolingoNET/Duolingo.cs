@@ -51,16 +51,12 @@ namespace DuolingoNET
         /// <summary>
         /// The <see cref="DuolingoNET.LoginData"/> containing the login data of the user.
         /// </summary>
-        private LoginData LoginData;
-
-        #endregion
-
-        #region Properties
+        private LoginData loginData;
 
         /// <summary>
         /// The <see cref="DuolingoNET.User"/> containing the data of the user.
         /// </summary>
-        public User.Root UserData { get; set; } = new User.Root();
+        private User.Root userData;
 
         #endregion
 
@@ -139,7 +135,7 @@ namespace DuolingoNET
         {
             var skills = new List<User.Skill>();
 
-            foreach (var skill in UserData.LanguageData.Skills)
+            foreach (var skill in userData.LanguageData.Skills)
             {
                 if (skill.Learned)
                 {
@@ -188,32 +184,37 @@ namespace DuolingoNET
         }
 
         /// <summary>
-        /// Gets the user general info</c>.
+        /// Gets the user general info <see cref="DuolingoNET.UserInfo"/></c>.
         /// </summary>
         public UserInfo GetUserInfo()
         {
             return new UserInfo
             {
-                avatar = UserData.Avatar,
-                bio = UserData.Bio,
-                browserLanguage = UserData.BrowserLanguage,
-                created = UserData.Created,
-                email = UserData.Email,
-                facebookId = UserData.FacebookId,
-                fullname = UserData.Fullname,
-                gplusId = UserData.GplusId,
-                id = UserData.Id,
-                inviteUrl = UserData.InviteUrl,
-                isAdmin = UserData.Admin,
-                isTrialAccount = UserData.TrialAccount,
-                learningLanguage = UserData.LearningLanguageString,
-                learningLanguageAbbreviation = UserData.LearningLanguage,
-                location = UserData.Location,
-                timezone = UserData.Timezone,
-                twitterId = UserData.TwitterId,
-                uiLanguage = UserData.UiLanguage,
-                username = UserData.Username,
+                Avatar = userData.Avatar,
+                Bio = userData.Bio,
+                BrowserLanguage = userData.BrowserLanguage,
+                Created = userData.Created,
+                Email = userData.Email,
+                FacebookId = userData.FacebookId,
+                Fullname = userData.Fullname,
+                GplusId = userData.GplusId,
+                Id = userData.Id,
+                InviteUrl = userData.InviteUrl,
+                IsAdmin = userData.Admin,
+                IsTrialAccount = userData.TrialAccount,
+                LearningLanguage = userData.LearningLanguageString,
+                LearningLanguageAbbreviation = userData.LearningLanguage,
+                Location = userData.Location,
+                Timezone = userData.Timezone,
+                TwitterId = userData.TwitterId,
+                UiLanguage = userData.UiLanguage,
+                Username = userData.Username,
             };
+        }
+
+        public User.Root GetUserDataRaw()
+        {
+            return userData;
         }
 
         /// <summary>
@@ -222,15 +223,15 @@ namespace DuolingoNET
         private async Task GetUserDataAsync()
         {
             // Gets the user data using the username extracted from the login data
-            var getUserDataResult = await client.GetAsync(string.Format("/users/{0}", LoginData.Username)).ConfigureAwait(false);
+            var getUserDataResult = await client.GetAsync(string.Format("/users/{0}", loginData.Username)).ConfigureAwait(false);
             getUserDataResult.EnsureSuccessStatusCode();
             var json = await getUserDataResult.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             // Parses the language data
-            UserData = JsonConvert.DeserializeObject<User.Root>(json);
+            userData = JsonConvert.DeserializeObject<User.Root>(json);
             JObject o = JObject.Parse(json);
-            var results = o["language_data"][UserData.LearningLanguage];
-            UserData.LanguageData = results.ToObject<User.LanguageStudied>();
+            var results = o["language_data"][userData.LearningLanguage];
+            userData.LanguageData = results.ToObject<User.LanguageStudied>();
         }
 
         /// <summary>
@@ -252,7 +253,7 @@ namespace DuolingoNET
             loginResult.EnsureSuccessStatusCode();
 
             // Reads the username on the website
-            LoginData = JsonConvert.DeserializeObject<LoginData>(await loginResult.Content.ReadAsStringAsync().ConfigureAwait(false));
+            loginData = JsonConvert.DeserializeObject<LoginData>(await loginResult.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 
         /// <summary>
