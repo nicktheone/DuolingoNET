@@ -99,8 +99,10 @@ namespace DuolingoNET
         #region Methods
 
         /// <summary>
-        /// Gets the TTS uri for any given lexeme.
+        /// Gets the TTS <see cref="Uri"/> for any given <see cref="Lexeme"/>.
         /// </summary>
+        /// <param name="lexemeId">A string representing Id of the lexeme to be retrieved.</param>
+        /// <returns>An awaitable <see cref="Task{Uri}"/> representing the Uri of the TTS.</returns>
         public async Task<Uri> GetTtsUrlAsync(string lexemeId)
         {
             var lexeme = await GetLexemeDataAsync(lexemeId).ConfigureAwait(false);
@@ -109,8 +111,9 @@ namespace DuolingoNET
         }
 
         /// <summary>
-        /// Gets a list of known words from every learned skill.
+        /// Gets a list of known words from every learned <see cref="User.Skill"/>.
         /// </summary>
+        /// <returns>A <see cref="List{T}"/> representing the words known by the user.</returns>
         public List<string> GetKnownWords()
         {
             var words = new List<string>();
@@ -127,8 +130,9 @@ namespace DuolingoNET
         }
 
         /// <summary>
-        /// Gets a list of learned skills.
+        /// Gets a list of learned <see cref="User.Skill"/>.
         /// </summary>
+        /// <returns>A <see cref="List{T}"/> representing the <see cref="User.Skill"/> known by the user.</returns>
         public List<User.Skill> GetLearnedSkills()
         {
             var skills = new List<User.Skill>();
@@ -145,8 +149,10 @@ namespace DuolingoNET
         }
 
         /// <summary>
-        /// Gets the lexeme data through <c>https://www.duolingo.com/api/1/dictionary_page</c>.
+        /// Gets the <see cref="Lexeme"/> data through <c>https://www.duolingo.com/api/1/dictionary_page</c>.
         /// </summary>
+        /// <param name="lexemeId">A string representing Id of the <see cref="Lexeme"/> to be retrieved.</param>
+        /// <returns>An awaitable <see cref="Task{Uri}"/> representing the <see cref="Lexeme"/> data.</returns>
         public async Task<Lexeme.Root> GetLexemeDataAsync(string lexemeId)
         {
             // Creates the lexeme that will be returned back
@@ -166,6 +172,7 @@ namespace DuolingoNET
         /// <summary>
         /// Gets the user vocabulary data through <c>https://www.duolingo.com/vocabulary/overview</c>.
         /// </summary>
+        /// <returns>An awaitable <see cref="Task{Uri}"/> representing the vocabulary of the user.</returns>
         public async Task<Vocabulary.Root> GetVocabularyAsync()
         {
             var vocabulary = new Vocabulary.Root();
@@ -182,8 +189,9 @@ namespace DuolingoNET
         }
 
         /// <summary>
-        /// Gets the user general info <see cref="DuolingoNET.UserInfo"/>.
+        /// Gets the user general info.
         /// </summary>
+        /// <returns>A <see cref="UserInfo"/> representing various general info on the user.</returns>
         public UserInfo GetUserInfo()
         {
             return new UserInfo
@@ -211,8 +219,10 @@ namespace DuolingoNET
         }
 
         /// <summary>
-        /// Gets the user raw data info <see cref="DuolingoNET.User.Root"/>.
+        /// Gets the user raw data info <see cref="User.Root"/>.
         /// </summary>
+        /// <returns>A <see cref="User.Root"/> representing the raw data on the user, as pulled from the API.
+        /// Lacks data on ads and tracking.</returns>
         public User.Root GetUserDataRaw()
         {
             return userData;
