@@ -10,7 +10,7 @@ Unofficial .NET Core Duolingo (https://www.duolingo.com/) API. Available as a [N
 - Create an instance of the `Duolingo` class and provide it with either a `username` or `email`, a `password` and a `HttpClient`.
 
 ```cs
-var duolingo = new Duolingo("USERNAME, PASSWORD", new System.Net.Http.HttpClient());
+var duolingo = new Duolingo(username, password, httpclient);
 ```
 Note: a valid Duolingo account is needed to get any data from the API. If you signed in with Google you need to switch to a Duolingo account.
 
@@ -21,13 +21,13 @@ Note: a valid Duolingo account is needed to get any data from the API. If you si
 - [Get User Info](#getuserinfo)
 #### GetUserDataRaw()
 ```cs
-var duolingo = new Duolingo("USERNAME, PASSWORD");
+var duolingo = new Duolingo(username, password, httpclient);
 var userData = GetUserDataRaw();
 ```
 Returns a `User.Root` containing all the raw data for the user, as pulled by the API. Lacks ads and tracking data.
 #### GetUserInfo()
 ```cs
-var duolingo = new Duolingo("USERNAME, PASSWORD");
+var duolingo = new Duolingo(username, password, httpclient);
 var userData = GetUserInfo();
 ```
 Returns a `UserInfo` containing various information on the user.
@@ -37,21 +37,22 @@ Returns a `UserInfo` containing various information on the user.
 - [Get Known Words](#getknownwords)
 - [Get Lexeme Data](#getlexemedataasync)
 - [Get Vocabulary](#getvocabularyasync)
+- [Get Learning Languages](#getlearninglanguages)
 #### GetLearnedSkills()
 ```cs
-var duolingo = new Duolingo("USERNAME, PASSWORD");
+var duolingo = new Duolingo(username, password, httpclient);
 var skills = GetLearnedSkills();
 ```
 Returns a `List<User.Skill>` containing all the skills learned within the active language(`"learned": True`) by the user.
 #### GetKnownWords()
 ```cs
-var duolingo = new Duolingo("USERNAME, PASSWORD");
+var duolingo = new Duolingo(username, password, httpclient);
 var skills = GetKnownWords();
 ```
 Returns a `List<string>` containing all the words known within the active language by the user.
 #### GetLexemeDataAsync()
 ```cs
-var duolingo = new Duolingo("USERNAME, PASSWORD");
+var duolingo = new Duolingo(username, password, httpclient);
 var lexeme = GetLexemeDataAsync(lexemeId);
 ```
 Returns a `Task<Lexeme.Root>` representing a single word.
@@ -61,7 +62,13 @@ string `lexemeId` **required**
 -- The id of the word you want to retrieve data for.
 #### GetVocabularyAsync()
 ```cs
-var duolingo = new Duolingo("USERNAME, PASSWORD");
+var duolingo = new Duolingo(username, password, httpclient);
 var lexeme = GetVocabularyAsync(lexemeId);
 ```
 Returns a `Task<Vocabulary.Root>` representing the user's vocabulary.
+#### GetLearningLanguages()
+```cs
+var duolingo = new Duolingo(username, password, httpclient);
+var learningLanguages = GetLearningLanguages();
+```
+Returns a `List<User.Language>` representing the languages being studied by the user.
