@@ -82,6 +82,24 @@ namespace DuolingoNET
         #region Methods
 
         /// <summary>
+        /// Gets a list of <see cref="User.Language"/> being learned.
+        /// </summary>
+        /// <returns>A <see cref="List{T}"/> representing the languages being studied by the user.</returns>
+        public List<User.Language> GetLearningLanguages()
+        {
+            var learningLanguages = new List<User.Language>();
+
+            foreach (var language in userData.Languages)
+            {
+                if (language.CurrentLearning)
+                {
+                    learningLanguages.Add(language);
+                }
+            }
+            return learningLanguages;
+        }
+
+        /// <summary>
         /// Gets the TTS <see cref="Uri"/> for any given <see cref="Lexeme"/>.
         /// </summary>
         /// <param name="lexemeId">A string representing Id of the lexeme to be retrieved.</param>
