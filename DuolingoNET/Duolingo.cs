@@ -82,6 +82,25 @@ namespace DuolingoNET
         #region Methods
 
         /// <summary>
+        /// Gets a list of <see cref="User.PointsRankingData"/>.
+        /// </summary>
+        /// <returns>A <see cref="List{T}"/> representing the friends of the the user.</returns>
+        public List<User.PointsRankingData> GetFriends()
+        {
+            var friends = new List<User.PointsRankingData>();
+
+            foreach (var friend in userData.LanguageData.PointsRankingData)
+            {
+                if (friend.Username != userData.Username)
+                {
+                    friends.Add(friend);
+                }
+            }
+
+            return friends;
+        }
+
+        /// <summary>
         /// Gets a list of <see cref="User.Language"/> being learned.
         /// </summary>
         /// <returns>A <see cref="List{T}"/> representing the languages being studied by the user.</returns>
