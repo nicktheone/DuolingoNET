@@ -2,8 +2,6 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,12 +47,12 @@ namespace DuolingoNET
         private readonly HttpClient client;
 
         /// <summary>
-        /// The <see cref="DuolingoNET.LoginData"/> containing the login data of the user.
+        /// The <see cref="LoginData"/> containing the login data of the user.
         /// </summary>
         private LoginData loginData;
 
         /// <summary>
-        /// The <see cref="DuolingoNET.User"/> containing the data of the user.
+        /// The <see cref="User"/> containing the data of the user.
         /// </summary>
         private User.Root userData;
 
@@ -248,7 +246,7 @@ namespace DuolingoNET
         /// <summary>
         /// Authenticates through <c>https://www.duolingo.com/login</c>.
         /// </summary>
-        private async Task LoginAsync() 
+        private async Task LoginAsync()
         {
             // Initial request to Duolingo homepage in order to get some basic cookies
             // It may help with login
