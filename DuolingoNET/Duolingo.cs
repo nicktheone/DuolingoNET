@@ -68,24 +68,9 @@ namespace DuolingoNET
         /// <param name="password">A string representing the password of the account.</param>
         public Duolingo(string username, string password, HttpClient client)
         {
-            if (username == null)
-            {
-                throw new ArgumentNullException(nameof(username));
-            }
-
-            if (username == null)
-            {
-                throw new ArgumentNullException(nameof(password));
-            }
-
-            if (client == null)
-            {
-                throw new ArgumentNullException(nameof(client));
-            }
-
-            this.loginUsername = username;
-            this.loginPassword = password;
-            this.client = client;
+            this.loginUsername = username ?? throw new ArgumentNullException(nameof(username));
+            this.loginPassword = password ?? throw new ArgumentNullException(nameof(password));
+            this.client = client ?? throw new ArgumentNullException(nameof(client));
 
             client.BaseAddress = baseUri;
 
