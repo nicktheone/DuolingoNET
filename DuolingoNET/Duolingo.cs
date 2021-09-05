@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DuolingoNET.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -80,6 +81,22 @@ namespace DuolingoNET
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Gets a <see cref="Streak"/>.
+        /// </summary>
+        /// <returns>A <see cref="Streak"/> representing the info on the active streak of the user.</returns>
+        public Streak GetStreak()
+        {
+            var streakInfo = new Streak()
+            { 
+                DailyGoal = userData.DailyGoal,
+                SiteStreak = userData.SiteStreak,
+                StreakExtendedToday = userData.StreakExtendedToday
+            };
+
+            return streakInfo;
+        }
 
         /// <summary>
         /// Gets a list of <see cref="User.Calendar"/>.
