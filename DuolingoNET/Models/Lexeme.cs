@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace DuolingoNET
+namespace DuolingoNET.Models
 {
     public class Lexeme
     {

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DuolingoNET
+namespace DuolingoNET.Models
 {
     public class User
     {

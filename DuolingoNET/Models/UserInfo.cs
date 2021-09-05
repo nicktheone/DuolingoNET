@@ -1,4 +1,4 @@
-﻿namespace DuolingoNET
+﻿namespace DuolingoNET.Models
 {
     public class UserInfo
     {

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace DuolingoNET
+namespace DuolingoNET.Models
 {
     /// <summary>
     /// The login class.
