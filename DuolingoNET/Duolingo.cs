@@ -84,7 +84,7 @@ namespace DuolingoNET
         /// <summary>
         /// Gets a list of <see cref="User.Calendar"/>.
         /// </summary>
-        /// <returns>A <see cref="List{T}"/> representing actions of the user.</returns>
+        /// <returns>A <see cref="List{T}"/> representing the actions of the user.</returns>
         public List<User.Calendar> GetCalendar()
         {
             var calendars = new List<User.Calendar>();

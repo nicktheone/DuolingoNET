@@ -20,6 +20,7 @@ Note: a valid Duolingo account is needed to get any data from the API. If you si
 - [Get User Data Raw](#getuserdataraw)
 - [Get User Info](#getuserinfo)
 - [Get Friends](#getfriends)
+- [Get Calendar](#getfcalendar)
 #### GetUserDataRaw()
 ```cs
 var duolingo = new Duolingo(username, password, httpclient);
@@ -38,6 +39,12 @@ var duolingo = new Duolingo(username, password, httpclient);
 var friends = GetFriends();
 ```
 Returns a `User.PointsRankingData` representing the friends of the the user.
+#### GetCalendar()
+```cs
+var duolingo = new Duolingo(username, password, httpclient);
+var friends = GetCalendar();
+```
+Returns a `User.Calendar` representing the actions of the user.
 
 ###### Language
 - [Get Learned Skills](#getlearnedskills)
