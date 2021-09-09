@@ -48,11 +48,6 @@ namespace DuolingoNET
         private readonly HttpClient client;
 
         /// <summary>
-        /// The <see cref="LoginData"/> containing the login data of the user.
-        /// </summary>
-        private LoginData loginData;
-
-        /// <summary>
         /// The <see cref="User"/> containing the data of the user.
         /// </summary>
         private User.Root userData;
@@ -284,7 +279,7 @@ namespace DuolingoNET
         /// <summary>
         /// Gets the user data through <c>https://www.duolingo.com/users/username</c>.
         /// </summary>
-        private async Task GetUserDataAsync()
+        private async Task GetUserDataAsync(LoginData loginData)
         {
             // Gets the user data using the username extracted from the login data
             var getUserDataResult = await client.GetAsync(string.Format("/users/{0}", loginData.Username)).ConfigureAwait(false);
@@ -301,7 +296,7 @@ namespace DuolingoNET
         /// <summary>
         /// Authenticates through <c>https://www.duolingo.com/login</c>.
         /// </summary>
-        private async Task LoginAsync()
+        private async Task<LoginData> LoginAsync()
         {
             // Initial request to Duolingo homepage in order to get some basic cookies
             // It may help with login
@@ -317,7 +312,9 @@ namespace DuolingoNET
             loginResult.EnsureSuccessStatusCode();
 
             // Reads the username on the website
-            loginData = JsonConvert.DeserializeObject<LoginData>(await loginResult.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var loginData = JsonConvert.DeserializeObject<LoginData>(await loginResult.Content.ReadAsStringAsync().ConfigureAwait(false));
+
+            return loginData;
         }
 
         /// <summary>
@@ -326,10 +323,10 @@ namespace DuolingoNET
         private void Initialize()
         {
             // Logs in
-            LoginAsync().GetAwaiter().GetResult();
+            var loginData = LoginAsync().GetAwaiter().GetResult();
 
             // Gets the user data
-            GetUserDataAsync().GetAwaiter().GetResult();
+            GetUserDataAsync(loginData).GetAwaiter().GetResult();
         }
 
         #endregion
