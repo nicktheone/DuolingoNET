@@ -38,7 +38,7 @@ namespace DuolingoNET.Models
             public object Number { get; set; }
 
             [JsonProperty("invalid")]
-            public bool Invalid { get; set; }
+            public object Invalid { get; set; }
 
             [JsonProperty("highlighted")]
             public bool Highlighted { get; set; }
